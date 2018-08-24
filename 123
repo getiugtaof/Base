@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define maxsize 100
+typedef int elemtype;
+typedef struct{
+	int i;
+	int j;
+	elemtype e;
+}Triple;
+
+typedef struct{
+	Triple data[maxsize+1];
+	int mu,nu,tu;
+}Matrix;
+
+void init(Matrix *M);
+void transpose(Matrix M,Matrix *T);
+void print(Matrix M,Matrix T);
+void main()
+{
+	Matrix M,T;
+	M.mu=T.mu=6;
+	M.nu=T.nu=7;
+	M.tu=T.tu=7;
+
+	init(&M);
+	transpose(M,&T);
+	print(M,T);
+}
+
+void init(Matrix *M)
+{
+	int num;
+	srand((unsigned int)time(NULL));
+	for(num=0;num<M->tu;num++)
+	{
+		M->data[num+1].i=rand()%M->mu;
+		M->data[num+1].j=rand()%M->nu;
+		M->data[num+1].e=rand()%100;
+	}
+}
+
+void transpose(Matrix M,Matrix *T)
+{
+	int col;
+	int p;//遍历M.data数组
+	int q=0;//遍历T->data数组
+
+	for(col=0;col<M.nu;col++)
+		for(p=0;p<M.tu;p++)
+			if(M.data[p+1].j==col)
+			{
+				T->data[q+1].i=M.data[p+1].j;
+				T->data[q+1].j=M.data[p+1].i;
+				T->data[q+1].e=M.data[p+1].e;
+				q++;
+			}
+}
+
+void print(Matrix M,Matrix T)
+{
+	int num;
+	printf("M矩阵三元组：\n");
+	for(num=0;num<M.tu;num++)
+		printf("%4d%4d%4d\n",M.data[num+1].i,M.data[num+1].j,M.data[num+1].e);
+	printf("T矩阵三元组：\n");
+	for(num=0;num<T.tu;num++)
+		printf("%4d%4d%4d\n",T.data[num+1].i,T.data[num+1].j,T.data[num+1].e);
+}
